@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable Management - Admin IMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/admin-style.css">
+    <script src="../../js/dataStore.js"></script>
+    <style>
+        .timetable-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .timetable-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .timetable-header h1 {
+            margin: 0;
+        }
+
+        .timetable-header .controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .timetable-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .timetable-table th, .timetable-table td {
+            padding: 1rem;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .timetable-table th {
+            background: #f8f9fc;
+            font-weight: 600;
+        }
+
+        .add-class-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .edit-btn, .delete-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        .delete-btn {
+            color: var(--danger-color);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close-btn:hover {
+            color: var(--danger-color);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="main-content">
+            <header class="header-content">
+                <h1>Timetable Management</h1>
+            </header>
+
+            <div class="timetable-container">
+                <div class="timetable-header">
+                    <h1>Class Schedule</h1>
+                    <div class="controls">
+                        <button class="add-class-btn" onclick="showAddClassModal()">Add Class</button>
+                    </div>
+                </div>
+
+                <table class="timetable-table">
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>Time</th>
+                            <th>Subject</th>
+                            <th>Faculty</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="timetableBody">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="classModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Class</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="classForm" onsubmit="handleClassSubmit(event)">
+                <div class="form-group">
+                    <label for="day">Day</label>
+                    <select id="day" name="day" required>
+                        <option value="">Select Day</option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="time">Time</label>
+                    <input type="text" id="time" name="time" required placeholder="e.g., 9:30 - 10:30">
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <select id="subject" name="subject" required>
+                        <option value="">Select Subject</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="faculty">Faculty</label>
+                    <select id="faculty" name="faculty" required>
+                        <option value="">Select Faculty</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentClassId = null;
+
+        fetch('../components/sidebar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.querySelector('.dashboard-container').insertAdjacentHTML('afterbegin', data);
+            });
+
+        function loadTimetable() {
+            const timetable = DataStore.getTimetable();
+            const tbody = document.getElementById('timetableBody');
+            tbody.innerHTML = timetable.map(entry => `
+                <tr>
+                    <td>${entry.day}</td>
+                    <td>${entry.time}</td>
+                    <td>${entry.subject}</td>
+                    <td>${entry.faculty}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editClass('${entry.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-btn" onclick="deleteClass('${entry.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function showAddClassModal() {
+            currentClassId = null;
+            document.getElementById('modalTitle').textContent = 'Add Class';
+            document.getElementById('classForm').reset();
+            document.getElementById('classModal').style.display = 'block';
+            populateSubjects();
+            populateFaculty();
+        }
+
+        function editClass(classId) {
+            currentClassId = classId;
+            const classData = DataStore.getTimetable().find(entry => entry.id === classId);
+            if (classData) {
+                document.getElementById('modalTitle').textContent = 'Edit Class';
+                document.getElementById('day').value = classData.day;
+                document.getElementById('time').value = classData.time;
+                document.getElementById('subject').value = classData.subject;
+                document.getElementById('faculty').value = classData.faculty;
+                document.getElementById('classModal').style.display = 'block';
+                populateSubjects();
+                populateFaculty();
+            }
+        }
+
+        function handleClassSubmit(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const classData = {
+                id: currentClassId || Date.now().toString(),
+                day: formData.get('day'),
+                time: formData.get('time'),
+                subject: formData.get('subject'),
+                faculty: formData.get('faculty')
+            };
+
+            if (currentClassId) {
+                DataStore.updateClass(currentClassId, classData);
+            } else {
+                DataStore.addClass(classData);
+            }
+
+            closeModal();
+            loadTimetable();
+        }
+
+        function closeModal() {
+            document.getElementById('classModal').style.display = 'none';
+        }
+
+        function deleteClass(classId) {
+            if (confirm('Are you sure you want to delete this class?')) {
+                DataStore.deleteClass(classId);
+                loadTimetable();
+            }
+        }
+
+        function populateSubjects() {
+            const subjects = DataStore.getCourses();
+            const subjectSelect = document.getElementById('subject');
+            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject.id;
+                option.textContent = subject.name;
+                subjectSelect.appendChild(option);
+            });
+        }
+
+        function populateFaculty() {
+            const faculty = DataStore.getFaculty();
+            const facultySelect = document.getElementById('faculty');
+            facultySelect.innerHTML = '<option value="">Select Faculty</option>';
+            faculty.forEach(facultyMember => {
+                const option = document.createElement('option');
+                option.value = facultyMember.id;
+                option.textContent = facultyMember.name;
+                facultySelect.appendChild(option);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            DataStore.initializeData();
+            loadTimetable();
+        });
+    </script>
+</body>
+</html>

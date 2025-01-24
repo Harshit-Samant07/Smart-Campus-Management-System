@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignments | Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../CSS/dashboard.css">
+    <link rel="stylesheet" href="../CSS/assignments.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <button class="toggle-sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2>IMS Dashboard</h2>
+            </div>
+            <nav>
+                <a href="../student-dashboard.html"><i class="fas fa-home"></i>Dashboard</a>
+                <a href="attendance.html"><i class="fas fa-calendar-check"></i>Attendance</a>
+                <a href="assignments.html" class="active"><i class="fas fa-tasks"></i>Assignments</a>
+                <a href="feedback.html"><i class="fas fa-comment"></i>Feedback</a>
+                <a href="timetable.html"><i class="fas fa-clock"></i>Timetable</a>
+                <a href="notices.html"><i class="fas fa-bullhorn"></i>Notices</a>
+                <a href="portfolio.html"><i class="fas fa-folder-open"></i>Portfolio</a>
+                <a href="scholarship.html"><i class="fas fa-award"></i>Scholarship</a>
+                <a href="profile.html"><i class="fas fa-user"></i>Profile</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../student-login.html"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <header>
+                <div class="header-content">
+                    <h1>My Assignments</h1>
+                    <div class="user-info">
+                        <span><i class="fas fa-bell"></i></span>
+                        <img src="../profile.png" alt="Profile" class="profile-pic">
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="subject-tabs">
+                    <button class="tab active">All Subjects</button>
+                    <button class="tab">Data Structures</button>
+                    <button class="tab">Maths IV</button>
+                    <button class="tab">Python</button>
+                    <button class="tab">DSTL</button>
+                    <button class="tab">UHV</button>
+                    <button class="tab">COA</button>
+                </div>
+
+                <div class="assignments-grid">
+                    <!-- Assignment Card 1 -->
+                    <div class="assignment-card">
+                        <div class="subject-badge">Data Structures</div>
+                        <h3>Binary Search Trees Implementation</h3>
+                        <div class="assignment-details">
+                            <p><i class="far fa-calendar-alt"></i> Due: Jan 12, 2025</p>
+                            <p><i class="far fa-clock"></i> Time: 11:59 AM</p>
+                        </div>
+                        <div class="assignment-footer">
+                            <a href="#" class="download-link">
+                                <i class="fas fa-download"></i> Download PDF
+                            </a>
+                            <span class="status-badge pending">
+                                <i class="fas fa-hourglass-half"></i> Pending
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Assignment Card 2 -->
+                    <div class="assignment-card">
+                        <div class="subject-badge">DSTL</div>
+                        <h3>Assignment 2</h3>
+                        <div class="assignment-details">
+                            <p><i class="far fa-calendar-alt"></i> Due: Dec 20, 2025</p>
+                            <p><i class="far fa-clock"></i> Time: 11:59 AM</p>
+                        </div>
+                        <div class="assignment-footer">
+                            <a href="#" class="download-link">
+                                <i class="fas fa-download"></i> Download PDF
+                            </a>
+                            <span class="status-badge submitted">
+                                <i class="fas fa-check-circle"></i> Submitted
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Add more assignment cards as needed -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add sidebar toggle functionality
+        document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('collapsed');
+            document.querySelector('.main-content').classList.toggle('expanded');
+        });
+
+        // Load the sidebar
+        fetch('/student-dashboard.html')
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const sidebar = doc.querySelector('.sidebar');
+                document.querySelector('.dashboard-container').insertBefore(
+                    sidebar, 
+                    document.querySelector('.main-content')
+                );
+            });
+
+        // Load assignments data
+        function loadAssignmentsData() {
+            const student = getCurrentStudent();
+            if (!student) return;
+
+            const assignments = DataStore.getAssignmentsByStudent(student.id);
+
+            // Update assignments table
+            const tbody = document.getElementById('assignmentsRecords');
+            tbody.innerHTML = assignments.map(assignment => `
+                <tr>
+                    <td>${assignment.title}</td>
+                    <td>${assignment.courseId}</td>
+                    <td>${new Date(assignment.dueDate).toLocaleDateString()}</td>
+                    <td>${assignment.status}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadAssignmentsData();
+        });
+    </script>
+</body>
+</html>

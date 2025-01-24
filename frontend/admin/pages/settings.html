@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Admin IMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/admin-style.css">
+    <script src="../../js/dataStore.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar will be loaded here -->
+        <div class="main-content">
+            <header class="header-content">
+                <h1>System Settings</h1>
+            </header>
+
+            <div class="settings-container">
+                <div class="settings-group">
+                    <h2><i class="fas fa-user-shield"></i> Admin Settings</h2>
+                    <div class="setting-item">
+                        <label>Change Password</label>
+                        <div class="input-group">
+                            <input type="password" id="currentPassword" placeholder="Current Password">
+                            <input type="password" id="newPassword" placeholder="New Password">
+                            <button onclick="changePassword()" class="btn-primary">Update Password</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h2><i class="fas fa-bell"></i> Notification Settings</h2>
+                    <div class="setting-item">
+                        <label>Email Notifications</label>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="emailNotif">
+                            <span class="slider"></span>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <label>System Notifications</label>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="systemNotif" checked>
+                            <span class="slider"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h2><i class="fas fa-database"></i> System Maintenance</h2>
+                    <div class="setting-item">
+                        <button onclick="backupData()" class="btn-secondary">
+                            <i class="fas fa-download"></i> Backup Data
+                        </button>
+                        <button onclick="clearCache()" class="btn-warning">
+                            <i class="fas fa-broom"></i> Clear Cache
+                        </button>
+                        <button onclick="resetSystem()" class="btn-danger">
+                            <i class="fas fa-exclamation-triangle"></i> Reset System
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load sidebar
+        fetch('../components/sidebar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.querySelector('.dashboard-container').insertAdjacentHTML('afterbegin', data);
+            });
+
+        function changePassword() {
+            const current = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            // Implement password change logic
+            alert('Password updated successfully');
+        }
+
+        function backupData() {
+            const data = {
+                students: DataStore.getStudents(),
+                faculty: DataStore.getFaculty(),
+                courses: DataStore.getCourses()
+            };
+            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ims_backup_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function clearCache() {
+            if(confirm('Clear system cache?')) {
+                localStorage.removeItem('ims_cache');
+                alert('Cache cleared successfully');
+            }
+        }
+
+        function resetSystem() {
+            if(confirm('WARNING: This will reset all system data. Continue?')) {
+                window.location.href = '../../utils/reset.html';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - IMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            min-height: 100vh;
+            background: 
+                linear-gradient(135deg, rgba(49, 59, 152, 0.8), rgba(63, 27, 99, 0.8)),
+                url('https://images.unsplash.com/photo-1497864149936-d3163f0c0f4b?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 420px;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.5s ease forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: #2c3e50;
+        }
+
+        .logo i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .form-group input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #e0e0e0;
+            padding: 15px 45px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 8px;
+            color: #e74c3c;
+            font-size: 0.9rem;
+            gap: 10px;
+        }
+
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            color: #667eea;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .password-toggle,
+        .password-strength,
+        .password-hint {
+            display: none;
+        }
+    </style>
+    <script src="js/dataStore.js"></script>
+    <script src="js/init.js"></script>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <i class="fas fa-user-shield"></i>
+            <h1>Admin Access</h1>
+        </div>
+        <form id="loginForm" onsubmit="handleAdminLogin(event)">
+            <div class="form-group">
+                <label for="adminId">Admin ID</label>
+                <div class="input-group">
+                    <i class="fas fa-user-tie"></i>
+                    <input type="text" id="adminId" required placeholder="Enter admin ID">
+                </div>
+                <div class="error-message" id="adminIdError"></div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        required 
+                        placeholder="Enter your password"
+                    >
+                </div>
+                <div class="error-message" id="passwordError"></div>
+            </div>
+            <button type="submit" class="login-btn">Admin Login</button>
+        </form>
+        <div class="security-badge">
+            <i class="fas fa-shield-alt"></i>
+            <span>Secure Administrator Access Point</span>
+        </div>
+    </div>
+
+    <div class="loading">
+        <i class="fas fa-circle-notch"></i>
+        <p>Authenticating...</p>
+    </div>
+
+    <script>
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.style.display = 'block';
+            errorElement.textContent = message;
+        }
+
+        document.getElementById('adminId').addEventListener('input', () => {
+            document.getElementById('adminIdError').style.display = 'none';
+        });
+
+        document.getElementById('password').addEventListener('input', () => {
+            document.getElementById('passwordError').style.display = 'none';
+        });
+
+        function handleAdminLogin(event) {
+            event.preventDefault();
+            const loading = document.querySelector('.loading');
+            const adminId = document.getElementById('adminId').value;
+            const password = document.getElementById('password').value;
+            
+            if (!adminId || !password) {
+                showError('passwordError', 'Please fill in all fields');
+                return;
+            }
+
+            loading.style.display = 'block';
+
+            console.log('Checking credentials:', { adminId, password });
+
+            setTimeout(() => {
+                try {
+                    const isValid = DataStore.verifyCredentials(adminId, password, 'admin');
+                    console.log('Validation result:', isValid);
+
+                    if (isValid) {
+                        localStorage.setItem('adminToken', btoa(JSON.stringify({
+                            userId: adminId,
+                            role: 'admin',
+                            exp: Date.now() + (12 * 60 * 60 * 1000) // 12 hours
+                        })));
+                        window.location.href = 'admin-dashboard.html';
+                    } else {
+                        loading.style.display = 'none';
+                        showError('passwordError', 'Invalid admin credentials');
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    loading.style.display = 'none';
+                    showError('passwordError', 'An error occurred during login');
+                }
+            }, 1500);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                DataStore.initializeData();
+                console.log('Data store initialized');
+                console.log('Current credentials:', JSON.parse(localStorage.getItem('ims_credentials')));
+            } catch (error) {
+                console.error('Initialization error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

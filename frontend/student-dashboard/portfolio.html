@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../CSS/dashboard.css">
+    <link rel="stylesheet" href="../CSS/portfolio.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <button class="toggle-sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="sidebar">
+            <div class="logo">
+                <h2>IMS Dashboard</h2>
+            </div>
+            <nav>
+                <a href="../student-dashboard.html"><i class="fas fa-home"></i>Dashboard</a>
+                <a href="attendance.html"><i class="fas fa-calendar-check"></i>Attendance</a>
+                <a href="assignments.html"><i class="fas fa-tasks"></i>Assignments</a>
+                <a href="feedback.html"><i class="fas fa-comment"></i>Feedback</a>
+                <a href="timetable.html"><i class="fas fa-clock"></i>Timetable</a>
+                <a href="notices.html"><i class="fas fa-bullhorn"></i>Notices</a>
+                <a href="portfolio.html" class="active"><i class="fas fa-folder-open"></i>Portfolio</a>
+                <a href="scholarship.html"><i class="fas fa-award"></i>Scholarship</a>
+                <a href="profile.html"><i class="fas fa-user"></i>Profile</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../student-login.html"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <header>
+                <div class="header-content">
+                    <h1>My Portfolio</h1>
+                    <div class="header-actions">
+                        <button id="editModeBtn" class="edit-btn">
+                            <i class="fas fa-edit"></i> Edit Portfolio
+                        </button>
+                        <div class="user-info">
+                            <span><i class="fas fa-bell"></i></span>
+                            <img src="../profile.png" alt="Profile" class="profile-pic">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="portfolio-content">
+                <div class="profile-section editable-section">
+                    <div class="profile-header">
+                        <div class="profile-image-container">
+                            <img src="../profile.png" alt="Student" class="profile-image" id="profileImage">
+                            <label for="imageUpload" class="image-upload-btn edit-only">
+                                <i class="fas fa-camera"></i>
+                            </label>
+                            <input type="file" id="imageUpload" accept="image/*" hidden>
+                        </div>
+                        <div class="profile-info">
+                            <div class="editable" data-placeholder="Your Name">Himanshu Sharma</div>
+                            <div class="editable" data-placeholder="Your Course">Computer Science Engineering</div>
+                            <div class="editable" data-placeholder="Batch">2024-2027 Batch</div>
+                            <div class="social-links">
+                                <div class="editable-link" data-platform="github">
+                                    <i class="fab fa-github"></i>
+                                    <input type="text" placeholder="GitHub URL" class="edit-only">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skills-section editable-section">
+                    <h3>Technical Skills</h3>
+                    <div class="skills-grid" id="skillsGrid">
+                        <div class="skill-card">
+                            <i class="fab fa-python"></i>
+                            <span>Python</span>
+                            <div class="skill-level">Advanced</div>
+                        </div>
+                        <div class="skill-card">
+                            <i class="fab fa-java"></i>
+                            <span>Java</span>
+                            <div class="skill-level">Intermediate</div>
+                        </div>
+                        <div class="add-skill-card edit-only">
+                            <i class="fas fa-plus"></i>
+                            <span>Add Skill</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="projects-section editable-section">
+                    <h3>Projects</h3>
+                    <div class="projects-grid" id="projectsGrid">
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="https://via.placeholder.com/300x200" alt="Project">
+                            </div>
+                            <div class="project-info">
+                                <h4>Smart Attendance System</h4>
+                                <p>A face recognition based attendance system using Python and OpenCV.</p>
+                                <div class="project-tags">
+                                    <span>Python</span>
+                                    <span>OpenCV</span>
+                                    <span>ML</span>
+                                </div>
+                                <div class="project-links">
+                                    <a href="#" class="btn"><i class="fab fa-github"></i> View Code</a>
+                                    <a href="#" class="btn"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="add-project-card edit-only">
+                            <i class="fas fa-plus"></i>
+                            <span>Add Project</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievements-section">
+                    <h3>Achievements</h3>
+                    <div class="achievements-grid">
+                        <div class="achievement-card">
+                            <i class="fas fa-trophy"></i>
+                            <h4>Hackathon Winner</h4>
+                            <p>First place in College Hackathon 2024</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="edit-actions edit-only">
+                    <button id="saveChanges" class="save-btn">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <button id="cancelEdit" class="cancel-btn">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="projectModal" class="modal">
+    </div>
+
+    <script src="/JS/portfolio-edit.js"></script>
+    <script>
+        document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('collapsed');
+            document.querySelector('.main-content').classList.toggle('expanded');
+        });
+    </script>
+</body>
+</html>

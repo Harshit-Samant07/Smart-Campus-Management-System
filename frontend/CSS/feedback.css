@@ -1,0 +1,189 @@
+.feedback-content {
+    padding: 20px;
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr 1fr;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.feedback-status-banner {
+    background: #fff3cd;
+    color: #856404;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.feedback-status-banner.locked {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Feedback Form Styles */
+.feedback-form-container {
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.feedback-form {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.rating-group {
+    margin-bottom: 20px;
+}
+
+.star-rating {
+    color: #ddd;
+    font-size: 1.5em;
+}
+
+.star-rating i {
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.star-rating i.active,
+.star-rating i:hover {
+    color: #f1c40f;
+}
+
+.submit-btn {
+    background: #3498db;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1em;
+    transition: background 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: #2980b9;
+}
+
+/* Feedback History Styles */
+.feedback-cards,
+.feedback-history {
+    display: none;
+}
+
+.feedback-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.feedback-period {
+    background: #e3f2fd;
+    color: #1565c0;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 0.9em;
+}
+
+.feedback-type {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9em;
+}
+
+.feedback-type.academic { background: #e8f5e9; color: #2e7d32; }
+.feedback-type.infrastructure { background: #e3f2fd; color: #1565c0; }
+.feedback-type.faculty { background: #fff3e0; color: #f57c00; }
+
+.feedback-date {
+    color: #7f8c8d;
+    font-size: 0.9em;
+}
+
+.feedback-rating {
+    color: #f1c40f;
+    margin: 10px 0;
+}
+
+.feedback-rating i.filled {
+    color: #f1c40f;
+}
+
+.feedback-text {
+    color: #666;
+    margin: 10px 0;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9em;
+}
+
+.status-badge.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.resolved {
+    background: #d4edda;
+    color: #155724;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .feedback-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .feedback-content {
+        padding: 15px;
+    }
+    
+    .submit-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .feedback-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}

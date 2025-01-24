@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Management - Admin IMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/admin-style.css">
+    <script src="../../js/dataStore.js"></script>
+    <script>
+        // Load sidebar
+        fetch('../components/sidebar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.querySelector('.dashboard-container').insertAdjacentHTML('afterbegin', data);
+            });
+    </script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar will be loaded here -->
+        <div class="main-content">
+            <header class="header-content">
+                <h1>Faculty Management</h1>
+                <div class="controls">
+                    <button class="action-btn add-btn" onclick="showAddFacultyModal()">
+                        <i class="fas fa-plus"></i> Add New Faculty
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Department</th>
+                                <th>Subjects</th>
+                                <th>Email</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="facultyTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadFaculty() {
+            const faculty = DataStore.getFaculty();
+            const tbody = document.getElementById('facultyTableBody');
+            tbody.innerHTML = faculty.map(f => `
+                <tr>
+                    <td>${f.id}</td>
+                    <td>${f.name}</td>
+                    <td>${f.department}</td>
+                    <td>${f.subjects.join(', ')}</td>
+                    <td>${f.email}</td>
+                    <td>
+                        <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                        <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        loadFaculty();
+    </script>
+</body>
+</html>

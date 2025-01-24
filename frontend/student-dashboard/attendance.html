@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance | Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../CSS/dashboard.css">
+    <link rel="stylesheet" href="../CSS/attendance.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <button class="toggle-sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="sidebar">
+            <div class="logo">
+                <h2>IMS Dashboard</h2>
+            </div>
+            <nav>
+                <a href="../student-dashboard.html"><i class="fas fa-home"></i>Dashboard</a>
+                <a href="attendance.html" class="active"><i class="fas fa-calendar-check"></i>Attendance</a>
+                <a href="assignments.html"><i class="fas fa-tasks"></i>Assignments</a>
+                <a href="feedback.html"><i class="fas fa-comment"></i>Feedback</a>
+                <a href="timetable.html"><i class="fas fa-clock"></i>Timetable</a>
+                <a href="notices.html"><i class="fas fa-bullhorn"></i>Notices</a>
+                <a href="portfolio.html"><i class="fas fa-folder-open"></i>Portfolio</a>
+                <a href="scholarship.html"><i class="fas fa-award"></i>Scholarship</a>
+                <a href="profile.html"><i class="fas fa-user"></i>Profile</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../student-login.html"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <header>
+                <div class="header-content">
+                    <h1>My Attendance</h1>
+                    <div class="user-info">
+                        <span><i class="fas fa-bell"></i></span>
+                        <img src="../profile.png" alt="Profile" class="profile-pic">
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <!-- Overall Attendance Chart Section -->
+                <div class="attendance-summary">
+                    <div class="chart-container">
+                        <canvas id="attendanceChart"></canvas>
+                    </div>
+                    <div class="attendance-stats">
+                        <div class="stat-item">
+                            <h3>Present</h3>
+                            <p class="present">72%</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>Absent</h3>
+                            <p class="absent">20%</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>Bunked</h3>
+                            <p class="bunked">8%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Attendance Section -->
+                <div class="attendance-details">
+                    <div class="filter-section">
+                        <select id="monthFilter">
+                            <option value="all">All Months</option>
+                            <option value="january">January</option>
+                            <option value="february">February</option>
+                            <!-- Add more months -->
+                        </select>
+                        <select id="subjectFilter">
+                            <option value="all">All Subjects</option>
+                            <option value="ds">Data Structures</option>
+                            <option value="dbms">Python Programming</option>
+                            <option value="dbms">COA</option>
+                            <option value="dbms">DSTL</option>
+                            <!-- Add more subjects -->
+                        </select>
+                    </div>
+
+                    <div class="attendance-table-container">
+                        <table class="attendance-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Subject</th>
+                                    <th>Status</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceRecords">
+                                <tr>
+                                    <td>Jan 15, 2025</td>
+                                    <td>Data Structures</td>
+                                    <td><span class="status present">Present</span></td>
+                                    <td>10:00 AM</td>
+                                </tr>
+                                <tr>
+                                    <td>Jan 12, 2025</td>
+                                    <td>Python Programming</td>
+                                    <td><span class="status bunked">Bunked</span></td>
+                                    <td>11:00 AM</td>
+                                </tr>
+                                <tr>
+                                    <td>Jan 15, 2025</td>
+                                    <td>COA</td>
+                                    <td><span class="status present">Present</span></td>
+                                    <td>09:00 AM</td>
+                                </tr>
+                                <tr>
+                                    <td>Jan 12, 2025</td>
+                                    <td>DSTL</td>
+                                    <td><span class="status bunked">Absent</span></td>
+                                    <td>2:00 PM</td>
+                                </tr>
+                                <!-- Add more rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize pie chart
+        const ctx = document.getElementById('attendanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Present', 'Absent', 'Bunked'],
+                datasets: [{
+                    data: [75, 15, 10],
+                    backgroundColor: [
+                        '#2ecc71',  // green
+                        '#e74c3c',  // red
+                        '#f1c40f'   // yellow
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+
+        // Add sidebar toggle functionality
+        document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('collapsed');
+            document.querySelector('.main-content').classList.toggle('expanded');
+        });
+
+        // Load the sidebar
+        fetch('/student-dashboard.html')
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const sidebar = doc.querySelector('.sidebar');
+                document.querySelector('.dashboard-container').insertBefore(
+                    sidebar, 
+                    document.querySelector('.main-content')
+                );
+            });
+
+        // Load attendance data
+        function loadAttendanceData() {
+            const student = getCurrentStudent();
+            if (!student) return;
+
+            const attendance = DataStore.getAttendance()
+                .filter(a => a.studentId === student.id);
+
+            // Update attendance table
+            const tbody = document.getElementById('attendanceRecords');
+            tbody.innerHTML = attendance.map(record => `
+                <tr>
+                    <td>${new Date(record.date).toLocaleDateString()}</td>
+                    <td>${record.subject}</td>
+                    <td class="${record.status}">${record.status}</td>
+                    <td>${record.timeSlot}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadAttendanceData();
+        });
+    </script>
+</body>
+</html>

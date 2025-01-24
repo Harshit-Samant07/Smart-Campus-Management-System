@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../CSS/dashboard.css">
+    <link rel="stylesheet" href="../CSS/profile.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <button class="toggle-sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="sidebar">
+            <div class="logo">
+                <h2>IMS Dashboard</h2>
+            </div>
+            <nav>
+                <a href="../student-dashboard.html"><i class="fas fa-home"></i>Dashboard</a>
+                <a href="attendance.html"><i class="fas fa-calendar-check"></i>Attendance</a>
+                <a href="assignments.html"><i class="fas fa-tasks"></i>Assignments</a>
+                <a href="feedback.html"><i class="fas fa-comment"></i>Feedback</a>
+                <a href="timetable.html"><i class="fas fa-clock"></i>Timetable</a>
+                <a href="notices.html"><i class="fas fa-bullhorn"></i>Notices</a>
+                <a href="portfolio.html"><i class="fas fa-folder-open"></i>Portfolio</a>
+                <a href="scholarship.html"><i class="fas fa-award"></i>Scholarship</a>
+                <a href="profile.html" class="active"><i class="fas fa-user"></i>Profile</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../student-login.html"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <header>
+                <div class="header-content">
+                    <h1>My Profile</h1>
+                    <div class="header-actions">
+                        <button id="editProfileBtn" class="edit-btn">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </button>
+                        <div class="user-info">
+                            <span><i class="fas fa-bell"></i></span>
+                            <img src="../profile.png" alt="Profile" class="profile-pic">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="profile-content">
+                <div class="profile-section">
+                    <div class="profile-picture-container">
+                        <img src="../profile.png" alt="Profile Picture" id="profilePicture">
+                        <label for="pictureUpload" class="picture-upload-btn edit-only">
+                            <i class="fas fa-camera"></i>
+                            <span>Change Picture</span>
+                        </label>
+                        <input type="file" id="pictureUpload" accept="image/*" hidden>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h2>Student Information</h2>
+                    <div class="info-grid non-editable">
+                        <div class="info-item">
+                            <label>Student ID</label>
+                            <div class="info-value" id="studentId">2021CSE001</div>
+                        </div>
+                        <div class="info-item">
+                            <label>Full Name</label>
+                            <div class="info-value" id="fullName">Himanshu Sharma</div>
+                        </div>
+                        <div class="info-item">
+                            <label>Branch</label>
+                            <div class="info-value">Computer Science Engineering</div>
+                        </div>
+                        <div class="info-item">
+                            <label>Current Semester</label>
+                            <div class="info-value">3rd Semester</div>
+                        </div>
+                        <div class="info-item">
+                            <label>Admission Year</label>
+                            <div class="info-value">2024</div>
+                        </div>
+                        <div class="info-item">
+                            <label>Academic Status</label>
+                            <div class="info-value status-active">Active</div>
+                        </div>
+                        <div class="info-item">
+                            <label>Mobile Number</label>
+                            <div class="info-value" id="phone">+91 987654XXXX</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h2>Contact Details</h2>
+                    <div class="info-grid editable">
+                        <div class="info-item">
+                            <label>Email Address</label>
+                            <input type="email" id="email" value="himanshu.sharma@example.com" disabled>
+                        </div>
+                        <div class="info-item">
+                            <label>Current Address</label>
+                            <textarea id="address" disabled>123 Student, University Campus</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h2>Additional Information</h2>
+                    <div class="info-grid editable">
+                        <div class="info-item">
+                            <label>Date of Birth</label>
+                            <input type="date" value="2003-05-15" disabled>
+                        </div>
+                        <div class="info-item">
+                            <label>Blood Group</label>
+                            <select disabled>
+                                <option selected>O+</option>
+                            </select>
+                        </div>
+                        <div class="info-item">
+                            <label>Emergency Contact</label>
+                            <input type="tel" value="+91 987654XXXX" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="edit-actions" style="display: none;">
+                    <button id="saveChanges" class="save-btn">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <button id="cancelEdit" class="cancel-btn">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/JS/profile.js"></script>
+    <script>
+        fetch('/student-dashboard.html')
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const sidebar = doc.querySelector('.sidebar');
+                document.querySelector('.dashboard-container').insertBefore(
+                    sidebar, 
+                    document.querySelector('.main-content')
+                );
+            });
+
+        function loadProfileData() {
+            const student = getCurrentStudent();
+            if (!student) return;
+
+            document.getElementById('studentId').textContent = student.id;
+            document.getElementById('fullName').textContent = student.name;
+            document.getElementById('email').textContent = student.email;
+            document.getElementById('phone').textContent = student.phone;
+            document.getElementById('address').textContent = student.address;
+            document.getElementById('guardianName').textContent = student.guardian.name;
+            document.getElementById('guardianPhone').textContent = student.guardian.phone;
+            document.getElementById('guardianEmail').textContent = student.guardian.email;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadProfileData();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback | Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../CSS/dashboard.css">
+    <link rel="stylesheet" href="../CSS/feedback.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <button class="toggle-sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="sidebar">
+            <div class="logo">
+                <h2>IMS Dashboard</h2>
+            </div>
+            <nav>
+                <a href="../student-dashboard.html"><i class="fas fa-home"></i>Dashboard</a>
+                <a href="attendance.html"><i class="fas fa-calendar-check"></i>Attendance</a>
+                <a href="assignments.html"><i class="fas fa-tasks"></i>Assignments</a>
+                <a href="feedback.html" class="active"><i class="fas fa-comment"></i>Feedback</a>
+                <a href="timetable.html"><i class="fas fa-clock"></i>Timetable</a>
+                <a href="notices.html"><i class="fas fa-bullhorn"></i>Notices</a>
+                <a href="portfolio.html"><i class="fas fa-folder-open"></i>Portfolio</a>
+                <a href="scholarship.html"><i class="fas fa-award"></i>Scholarship</a>
+                <a href="profile.html"><i class="fas fa-user"></i>Profile</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../student-login.html"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <header>
+                <div class="header-content">
+                    <h1>Feedback</h1>
+                    <div class="user-info">
+                        <span><i class="fas fa-bell"></i></span>
+                        <img src="../profile.png" alt="Profile" class="profile-pic">
+                    </div>
+                </div>
+            </header>
+
+            <div class="feedback-content">
+                <!-- Monthly Feedback Status -->
+                <div class="feedback-status-banner" id="feedbackStatusBanner">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Next feedback session will be available on February 1, 2025</span>
+                </div>
+
+                <!-- New Feedback Form -->
+                <div class="feedback-form-container">
+                    <div class="feedback-header">
+                        <h2>Monthly Feedback Form</h2>
+                        <span class="feedback-period">January 2025</span>
+                    </div>
+                    <form class="feedback-form" id="feedbackForm">
+                        <div class="form-group">
+                            <label for="feedbackType">Feedback Type</label>
+                            <select id="feedbackType" required>
+                                <option value="">Select Type</option>
+                                <option value="academic">Academic</option>
+                                <option value="infrastructure">Infrastructure</option>
+                                <option value="faculty">Faculty</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subject/Topic</label>
+                            <input type="text" id="subject" placeholder="Enter subject" required>
+                        </div>
+
+                        <div class="rating-group">
+                            <label>Rating</label>
+                            <div class="star-rating">
+                                <i class="fas fa-star" data-rating="1"></i>
+                                <i class="fas fa-star" data-rating="2"></i>
+                                <i class="fas fa-star" data-rating="3"></i>
+                                <i class="fas fa-star" data-rating="4"></i>
+                                <i class="fas fa-star" data-rating="5"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" rows="4" placeholder="Provide detailed feedback" required></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i> Submit Feedback
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar toggle
+        document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('collapsed');
+            document.querySelector('.main-content').classList.toggle('expanded');
+        });
+
+        // Star rating functionality
+        const stars = document.querySelectorAll('.star-rating i');
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = this.dataset.rating;
+                stars.forEach(s => {
+                    s.classList.remove('active');
+                    if (s.dataset.rating <= rating) {
+                        s.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Check feedback availability
+        function checkFeedbackAvailability() {
+            const lastFeedbackDate = localStorage.getItem('lastFeedbackDate');
+            const currentDate = new Date();
+            const feedbackForm = document.querySelector('.feedback-form');
+            const statusBanner = document.getElementById('feedbackStatusBanner');
+
+            if (lastFeedbackDate) {
+                const lastDate = new Date(lastFeedbackDate);
+                const nextAvailableDate = new Date(lastDate.getFullYear(), lastDate.getMonth() + 1, 1);
+                
+                if (currentDate < nextAvailableDate) {
+                    feedbackForm.style.display = 'none';
+                    statusBanner.classList.add('locked');
+                    return false;
+                }
+            }
+            
+            statusBanner.style.display = 'none';
+            return true;
+        }
+
+        // Handle form submission
+        document.querySelector('.feedback-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (checkFeedbackAvailability()) {
+                localStorage.setItem('lastFeedbackDate', new Date().toISOString());
+                alert('Feedback submitted successfully! Next feedback will be available next month.');
+                window.location.reload();
+            }
+        });
+
+        // Check availability on page load
+        document.addEventListener('DOMContentLoaded', checkFeedbackAvailability);
+    </script>
+</body>
+</html>

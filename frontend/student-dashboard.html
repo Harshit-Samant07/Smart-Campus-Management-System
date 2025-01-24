@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/dataStore.js"></script>
+</head>
+<body>
+    <script>
+        if (!localStorage.getItem('token')) {
+            window.location.href = '/frontend/student-login.html';
+        }
+    </script>
+    <div class="dashboard-container">
+        <button class="toggle-sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="sidebar">
+            <div class="logo">
+                <h2>IMS Dashboard</h2>
+            </div>
+            <nav>
+                <a href="/student-dashboard.html" class="active">
+                    <i class="fas fa-home"></i><span>Dashboard</span>
+                </a>
+                <a href="student-dashboard/attendance.html">
+                    <i class="fas fa-calendar-check"></i><span>Attendance</span>
+                </a>
+                <a href="student-dashboard/assignments.html">
+                    <i class="fas fa-tasks"></i><span>Assignments</span>
+                </a>
+                <a href="student-dashboard/feedback.html">
+                    <i class="fas fa-comment"></i><span>Feedback</span>
+                </a>
+                <a href="student-dashboard/timetable.html">
+                    <i class="fas fa-clock"></i><span>Timetable</span>
+                </a>
+                <a href="/student-dashboard/notices.html">
+                    <i class="fas fa-bullhorn"></i><span>Notices</span>
+                </a>
+                <a href="/student-dashboard/portfolio.html">
+                    <i class="fas fa-folder-open"></i><span>Portfolio</span>
+                </a>
+                <a href="/student-dashboard/scholarship.html">
+                    <i class="fas fa-award"></i><span>Scholarship</span>
+                </a>
+                <a href="student-dashboard/profile.html">
+                    <i class="fas fa-user"></i><span>Profile</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <header>
+                <div class="header-content">
+                    <div class="student-info">
+                        <h1>Welcome, Student</h1>
+                        <div class="student-details">
+                            <span class="detail-item"><i class="fas fa-id-card"></i> ID: 2021CSE001</span>
+                            <span class="detail-item"><i class="fas fa-user-circle"></i> Roll No: CSE/21/001</span>
+                        </div>
+                    </div>
+                    <div class="user-info">
+                        <span><i class="fas fa-bell"></i></span>
+                        <img src="profile.png" alt="Profile" class="profile-pic">
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="stats-container">
+                    <div class="stat-card attendance-card">
+                        <div class="attendance-chart-container">
+                            <canvas id="attendanceChart"></canvas>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Attendance</h3>
+                            <p>85% Present</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-tasks"></i>
+                        <div class="stat-info">
+                            <h3>Assignments</h3>
+                            <p>5 Pending</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-graduation-cap"></i>
+                        <div class="stat-info">
+                            <h3>Current CGPA</h3>
+                            <p>3.8</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-info">
+                            <h3>Next Class</h3>
+                            <p>10:30 AM</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-activities">
+                    <h2>Recent Activities</h2>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <i class="fas fa-file-alt"></i>
+                            <div class="activity-info">
+                                <h4>Assignment Submitted</h4>
+                                <p>Data Structures - Assignment 3</p>
+                                <small>2 hours ago</small>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="activity-info">
+                                <h4>Attendance Marked</h4>
+                                <p>Database Management Systems</p>
+                                <small>5 hours ago</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function getCurrentStudent() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'student-login.html';
+                return null;
+            }
+
+            try {
+                const decoded = JSON.parse(atob(token));
+                const studentId = decoded.userId;
+                return DataStore.getStudents().find(s => s.id === studentId);
+            } catch (error) {
+                console.error('Error getting student data:', error);
+                return null;
+            }
+        }
+
+        function updateDashboard() {
+            const student = getCurrentStudent();
+            if (!student) return;
+
+            document.querySelector('.student-info h1').textContent = `Welcome, ${student.name}`;
+            document.querySelector('.detail-item:nth-child(1)').innerHTML = 
+                `<i class="fas fa-id-card"></i> ID: ${student.id}`;
+            document.querySelector('.detail-item:nth-child(2)').innerHTML = 
+                `<i class="fas fa-user-circle"></i> Course: ${student.course}`;
+
+            document.querySelector('.attendance-card .stat-info p').textContent = 
+                `${student.attendance}% Present`;
+            document.querySelector('.stat-card:nth-child(3) .stat-info p').textContent = 
+                `${student.cgpa}`;
+
+            const ctx = document.getElementById('attendanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Present', 'Absent'],
+                    datasets: [{
+                        data: [student.attendance, 100 - student.attendance],
+                        backgroundColor: ['#2ecc71', '#e74c3c'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    cutout: '70%'
+                }
+            });
+
+            const assignments = DataStore.getAssignmentsByStudent(student.id);
+            const pendingAssignments = assignments.filter(a => a.status === 'pending');
+            document.querySelector('.stat-card:nth-child(2) .stat-info p').textContent = 
+                `${pendingAssignments.length} Pending`;
+
+            updateRecentActivities(student);
+        }
+
+        function updateRecentActivities(student) {
+            const attendance = DataStore.getAttendance()
+                .filter(a => a.studentId === student.id)
+                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                .slice(0, 5);
+
+            const activityList = document.querySelector('.activity-list');
+            activityList.innerHTML = attendance.map(activity => `
+                <div class="activity-item">
+                    <i class="fas ${activity.status === 'present' ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                    <div class="activity-info">
+                        <h4>${activity.status === 'present' ? 'Present' : 'Absent'}</h4>
+                        <p>${activity.subject || 'All Subjects'}</p>
+                        <small>${new Date(activity.timestamp).toLocaleDateString()}</small>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            DataStore.initializeData();
+            updateDashboard();
+
+            document.querySelector('.sidebar-footer a').addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.removeItem('token');
+                window.location.href = 'student-login.html';
+            });
+
+            document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('collapsed');
+                document.querySelector('.main-content').classList.toggle('expanded');
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname;
+            const navLinks = document.querySelectorAll('.sidebar nav a');
+            
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+
+            document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('collapsed');
+                document.querySelector('.main-content').classList.toggle('expanded');
+            });
+        });
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('token');
+                window.location.href = '/student-login.html';
+            }
+        }
+
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/student-login.html';
+                return;
+            }
+
+            try {
+                const decoded = JSON.parse(atob(token));
+                if (decoded.exp < Date.now()) {
+                    localStorage.removeItem('token');
+                    window.location.href = '/student-login.html';
+                }
+            } catch (error) {
+                console.error('Invalid token:', error);
+                localStorage.removeItem('token');
+                window.location.href = '/student-login.html';
+            }
+        }
+
+        checkAuth();
+    </script>
+</body>
+</html>

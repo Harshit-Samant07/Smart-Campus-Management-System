@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management - Admin IMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/admin-style.css">
+    <script src="../../js/dataStore.js"></script>
+    <style>
+        .attendance-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .attendance-sheet {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .date-selector {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .date-selector input {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .attendance-toggle {
+            width: 60px;
+            height: 30px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .attendance-toggle input {
+            display: none;
+        }
+
+        .attendance-toggle span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e74c3c;
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+
+        .attendance-toggle input:checked + span {
+            background-color: #2ecc71;
+        }
+
+        .remarks {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .warning {
+            color: #e74c3c;
+        }
+
+        .section-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-tab {
+            padding: 0.5rem 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .section-tab.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .subject-selector {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .subject-selector select {
+            min-width: 200px;
+        }
+
+        .time-slot {
+            padding: 0.5rem;
+            background: #f8f9fc;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .attendance-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 4px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+
+        .summary-card h4 {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-card .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .subject-schedule {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .class-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f8f9fc;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .class-info select {
+            min-width: 200px;
+        }
+
+        .attendance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .period-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .period-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .period-stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .quick-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .mark-all {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .clear-all {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .student-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .student-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .save-attendance {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar will be loaded here -->
+        <div class="main-content">
+            <header class="header-content">
+                <h1>Daily Attendance Management</h1>
+                <div class="date-selector">
+                    <input type="date" id="attendanceDate" value="">
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <div class="class-info">
+                    <select id="batchSelect" onchange="loadSchedule()">
+                        <option value="">Select Batch</option>
+                        <option value="2021">Batch 2021</option>
+                        <option value="2022">Batch 2022</option>
+                        <option value="2023">Batch 2023</option>
+                    </select>
+                    <select id="sectionSelect" onchange="loadSchedule()">
+                        <option value="">Select Section</option>
+                        <option value="A">Section A</option>
+                        <option value="B">Section B</option>
+                        <option value="C">Section C</option>
+                    </select>
+                </div>
+
+                <div id="periodContainer" class="attendance-grid">
+                    <!-- Period cards will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load sidebar
+        fetch('../components/sidebar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.querySelector('.dashboard-container').insertAdjacentHTML('afterbegin', data);
+            });
+
+        // Set today's date as default
+        document.getElementById('attendanceDate').valueAsDate = new Date();
+
+        function loadSchedule() {
+            const date = new Date(document.getElementById('attendanceDate').value);
+            const day = date.toLocaleDateString('en-US', { weekday: 'long' });
+
+            console.log('Loading schedule for:', day);
+            const timetable = DataStore.getTimetable();
+            console.log('Retrieved timetable:', timetable);
+
+            const todaySchedule = timetable.filter(entry => entry.day === day);
+            console.log('Today\'s schedule:', todaySchedule);
+
+            const container = document.getElementById('periodContainer');
+            if (todaySchedule.length === 0) {
+                container.innerHTML = '<div class="period-card">No classes scheduled for this day</div>';
+                return;
+            }
+
+            container.innerHTML = todaySchedule.map(period => `
+                <div class="period-card">
+                    <div class="period-header">
+                        <h3>${period.subject}</h3>
+                        <span>${period.time}</span>
+                    </div>
+                    <div class="period-stats">
+                        <span>Total: <b id="total-${period.subject}">0</b></span>
+                        <span>Present: <b id="present-${period.subject}">0</b></span>
+                        <span>Absent: <b id="absent-${period.subject}">0</b></span>
+                    </div>
+                    <div class="quick-actions">
+                        <button class="quick-btn" onclick="viewStudents('${period.subject}')">
+                            View Students
+                        </button>
+                    </div>
+                    <div class="student-list" id="list-${period.subject}" style="display: none;">
+                    </div>
+                    <button class="save-attendance" onclick="saveAttendance('${period.subject}')" style="display: none;">
+                        Save Attendance
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function viewStudents(subject) {
+            console.log('Viewing students for subject:', subject);
+            const students = DataStore.getStudents();
+            console.log('Retrieved students:', students);
+
+            if (!students || students.length === 0) {
+                console.log('No students found in DataStore');
+                return;
+            }
+
+            const studentList = document.getElementById(`list-${subject}`);
+            studentList.innerHTML = students.map(student => `
+                <div class="student-item">
+                    <div class="student-info">
+                        <span>${student.id}</span>
+                        <span>${student.name}</span>
+                    </div>
+                    <label class="attendance-toggle">
+                        <input type="checkbox" 
+                            onchange="updateStats('${subject}')"
+                            data-student="${student.id}">
+                        <span></span>
+                    </label>
+                </div>
+            `).join('');
+            
+            studentList.style.display = 'block';
+            document.querySelector(`.save-attendance[onclick="saveAttendance('${subject}')"]`).style.display = 'block';
+            updateStats(subject);
+        }
+
+        function updateStats(subject) {
+            const total = document.querySelectorAll(`#list-${subject} .student-item`).length;
+            const present = document.querySelectorAll(`#list-${subject} input:checked`).length;
+            
+            document.getElementById(`total-${subject}`).textContent = total;
+            document.getElementById(`present-${subject}`).textContent = present;
+            document.getElementById(`absent-${subject}`).textContent = total - present;
+        }
+
+        function markAll(subject, present) {
+            document.querySelectorAll(`#list-${subject} input[type="checkbox"]`)
+                .forEach(checkbox => checkbox.checked = present);
+            updateStats(subject);
+        }
+
+        function saveAttendance(subject) {
+            const date = document.getElementById('attendanceDate').value;
+            const checkboxes = document.querySelectorAll(`#list-${subject} input[type="checkbox"]`);
+            
+            checkboxes.forEach(checkbox => {
+                const studentId = checkbox.dataset.student;
+                DataStore.updateAttendance(studentId, subject, date, {
+                    status: checkbox.checked ? 'present' : 'absent',
+                    section: document.getElementById('sectionSelect').value,
+                    subject: subject
+                });
+            });
+
+            showToast(`Attendance saved for ${subject}`);
+        }
+
+        function showToast(message) {
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            // Remove toast after 3 seconds
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Page loaded, initializing DataStore...');
+            DataStore.initializeData();
+            document.getElementById('attendanceDate').valueAsDate = new Date();
+            loadSchedule();
+        });
+
+        // Initialize
+        document.getElementById('attendanceDate').valueAsDate = new Date();
+        document.getElementById('attendanceDate').addEventListener('change', loadSchedule);
+    </script>
+</body>
+</html>

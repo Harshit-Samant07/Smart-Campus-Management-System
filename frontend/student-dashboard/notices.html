@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notices | Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../CSS/dashboard.css">
+    <link rel="stylesheet" href="../CSS/notices.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <button class="toggle-sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="sidebar">
+            <div class="logo">
+                <h2>IMS Dashboard</h2>
+            </div>
+            <nav>
+                <a href="../student-dashboard.html"><i class="fas fa-home"></i>Dashboard</a>
+                <a href="attendance.html"><i class="fas fa-calendar-check"></i>Attendance</a>
+                <a href="assignments.html"><i class="fas fa-tasks"></i>Assignments</a>
+                <a href="feedback.html"><i class="fas fa-comment"></i>Feedback</a>
+                <a href="timetable.html"><i class="fas fa-clock"></i>Timetable</a>
+                <a href="notices.html" class="active"><i class="fas fa-bullhorn"></i>Notices</a>
+                <a href="portfolio.html"><i class="fas fa-folder-open"></i>Portfolio</a>
+                <a href="scholarship.html"><i class="fas fa-award"></i>Scholarship</a>
+                <a href="profile.html"><i class="fas fa-user"></i>Profile</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../student-login.html"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <header>
+                <div class="header-content">
+                    <h1>Important Notices</h1>
+                    <div class="user-info">
+                        <span><i class="fas fa-bell"></i></span>
+                        <img src="../profile.png" alt="Profile" class="profile-pic">
+                    </div>
+                </div>
+            </header>
+
+            <div class="notice-content">
+                <div class="notice-filters">
+                    <div class="filter-options">
+                        <select id="categoryFilter">
+                            <option value="all">All Categories</option>
+                            <option value="academic">Academic</option>
+                            <option value="exam">Examination</option>
+                            <option value="event">Events</option>
+                            <option value="placement">Placement</option>
+                        </select>
+                        <select id="dateFilter">
+                            <option value="all">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="notice-grid">
+                    <div class="notice-card urgent">
+                        <span class="priority-tag">Urgent</span>
+                        <div class="notice-header">
+                            <h3>End Semester Examination Schedule</h3>
+                            <span class="notice-date">
+                                <i class="far fa-calendar-alt"></i>
+                                january 15, 2025
+                            </span>
+                        </div>
+                        <div class="notice-category">Examination</div>
+                        <p class="notice-text">End semester examinations will commence from April 1st, 2025. Detailed schedule attached below.</p>
+                        <div class="notice-attachments">
+                            <a href="#" class="attachment">
+                                <i class="fas fa-file-pdf"></i>
+                                Exam Schedule.pdf
+                            </a>
+                        </div>
+                        <div class="notice-footer">
+                            <button class="read-more">Read More</button>
+                            <span class="views"><i class="far fa-eye"></i> 245 views</span>
+                        </div>
+                    </div>
+
+                    <div class="notice-card">
+                        <div class="notice-header">
+                            <h3>Campus Placement Drive</h3>
+                            <span class="notice-date">
+                                <i class="far fa-calendar-alt"></i>
+                                January 14, 2025
+                            </span>
+                        </div>
+                        <div class="notice-category">Placement</div>
+                        <p class="notice-text">TechCorp is conducting a placement drive for 2024 batch students on March 25th.</p>
+                        <div class="notice-footer">
+                            <button class="read-more">Read More</button>
+                            <span class="views"><i class="far fa-eye"></i> 189 views</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="pagination">
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <span class="page-dots">...</span>
+                    <button class="page-btn">8</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('collapsed');
+            document.querySelector('.main-content').classList.toggle('expanded');
+        });
+    </script>
+</body>
+</html>

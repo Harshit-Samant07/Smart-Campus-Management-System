@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - IMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/dataStore.js"></script>
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #858796;
+            --success-color: #1cc88a;
+            --info-color: #36b9cc;
+            --warning-color: #f6c23e;
+            --danger-color: #e74a3b;
+            --dark-color: #5a5c69;
+            --card-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+            background: #f8f9fc;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(180deg, var(--primary-color) 10%, #224abe 100%);
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .sidebar .logo {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar nav a {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar nav a:hover, .sidebar nav a.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .sidebar nav a i {
+            width: 24px;
+            margin-right: 0.75rem;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 1.5rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 0.35rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.35rem;
+            box-shadow: var(--card-shadow);
+            border-left: 4px solid var(--primary-color);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card.students { border-left-color: var(--primary-color); }
+        .stat-card.attendance { border-left-color: var(--success-color); }
+        .stat-card.courses { border-left-color: var(--info-color); }
+        .stat-card.performance { border-left-color: var(--warning-color); }
+
+        .data-table-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.35rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .data-table {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .data-table th {
+            background: #f8f9fc;
+            padding: 1rem;
+            font-weight: 600;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.35rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn.add-btn {
+            background: var(--success-color);
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .search-bar {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 0.35rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 0.35rem;
+            min-width: 150px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .pagination button {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 0.35rem;
+            cursor: pointer;
+        }
+
+        .pagination button.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+            .sidebar .logo h2, .sidebar nav a span {
+                display: none;
+            }
+            .sidebar nav a i {
+                margin-right: 0;
+            }
+        }
+
+        /* Add these new styles */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+        }
+
+        .profile-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: white;
+            box-shadow: var(--card-shadow);
+            border-radius: 4px;
+            min-width: 200px;
+            z-index: 1000;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 15px;
+            color: var(--dark-color);
+            text-decoration: none;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fc;
+        }
+
+        .panel {
+            display: none;
+            position: fixed;
+            right: 20px;
+            top: 80px;
+            background: white;
+            box-shadow: var(--card-shadow);
+            border-radius: 8px;
+            width: 300px;
+            z-index: 1000;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .notifications-list {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="logo">
+                <h2>Admin Panel</h2>
+            </div>
+            <nav>
+                <a href="admin-dashboard.html" class="active"><i class="fas fa-chart-line"></i>Dashboard</a>
+                <a href="admin/pages/students.html"><i class="fas fa-users"></i>Students</a>
+                <a href="admin/pages/faculty.html"><i class="fas fa-chalkboard-teacher"></i>Faculty</a>
+                <a href="admin/pages/attendance.html"><i class="fas fa-calendar-check"></i>Attendance</a>
+                <a href="admin/pages/timetable.html"><i class="fas fa-clock"></i>Timetable</a>
+                <a href="admin/pages/reports.html"><i class="fas fa-chart-bar"></i>Reports</a>
+                <a href="admin/pages/settings.html"><i class="fas fa-cog"></i>Settings</a>
+                <a href="#" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <header class="header-content">
+                <h1>Admin Dashboard</h1>
+                <div class="user-controls">
+                    <button class="action-btn" onclick="showNotifications()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificationCount">0</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleSettings()">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <div class="profile-dropdown">
+                        <img src="profile.png" alt="Admin" class="profile-pic" onclick="toggleProfileMenu()">
+                        <div class="dropdown-menu" id="profileMenu">
+                            <a href="admin/pages/profile.html"><i class="fas fa-user"></i> Profile</a>
+                            <a href="admin/pages/settings.html"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="#" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="search-bar">
+                <input type="text" placeholder="Search students..." id="searchInput">
+                <button class="action-btn"><i class="fas fa-search"></i></button>
+            </div>
+
+            <div class="filters">
+                <select class="filter-select" id="courseFilter">
+                    <option value="">All Courses</option>
+                    <option value="CS">Computer Science</option>
+                    <option value="IT">Information Technology</option>
+                </select>
+                <select class="filter-select" id="semesterFilter">
+                    <option value="">All Semesters</option>
+                    <option value="1">Semester 1</option>
+                    <option value="2">Semester 2</option>
+                </select>
+            </div>
+
+            <div class="admin-stats stats-grid">
+                <div class="admin-card stat-card students">
+                    <h3>Total Students</h3>
+                    <p class="stat-number">1,234</p>
+                    <canvas id="studentsChart"></canvas>
+                </div>
+                <div class="admin-card stat-card attendance">
+                    <h3>Average Attendance</h3>
+                    <p class="stat-number">74%</p>
+                    <canvas id="attendanceChart"></canvas>
+                </div>
+                <div class="admin-card stat-card performance">
+                    <h3>Course Performance</h3>
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+
+            <div class="admin-card data-table-container">
+                <div class="section-header">
+                    <h2>Student Management</h2>
+                    <button class="action-btn add-btn" onclick="window.location.href='admin/pages/students.html'">
+                        <i class="fas fa-plus"></i> Add Student
+                    </button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Course</th>
+                            <th>Attendance</th>
+                            <th>CGPA</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button>Previous</button>
+                <button class="active">1</button>
+                <button>2</button>
+                <button>3</button>
+                <button>Next</button>
+            </div>
+
+            <div id="notificationsPanel" class="panel">
+                <div class="panel-header">
+                    <h3>Notifications</h3>
+                    <button class="close-btn" onclick="hideNotifications()">×</button>
+                </div>
+                <div class="notifications-list" id="notificationsList"></div>
+            </div>
+
+            <div id="settingsPanel" class="panel">
+                <div class="panel-header">
+                    <h3>Quick Settings</h3>
+                    <button class="close-btn" onclick="toggleSettings()">×</button>
+                </div>
+                <div class="settings-content">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (!localStorage.getItem('adminToken')) {
+            window.location.href = 'admin-login.html';
+        }
+
+        function initCharts() {
+            const ctx = document.getElementById('studentsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                    datasets: [{
+                        label: 'New Students',
+                        data: [1, 6, 8, 5, 4],
+                        borderColor: '#3498db'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        initCharts();
+
+        DataStore.initializeData();
+
+        function populateStudentTable(students = DataStore.getStudents()) {
+            const tableBody = document.getElementById('studentTableBody');
+            tableBody.innerHTML = students.map(student => `
+                <tr>
+                    <td>${student.id}</td>
+                    <td>${student.name}</td>
+                    <td>${student.course}</td>
+                    <td>${student.attendance}%</td>
+                    <td>${student.cgpa}</td>
+                    <td>
+                        <button class="action-btn edit-btn" onclick="editStudent('${student.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteStudent('${student.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function editStudent(studentId) {
+            const student = DataStore.getStudents().find(s => s.id === studentId);
+            console.log('Editing student:', student);
+        }
+
+        function deleteStudent(studentId) {
+            if (confirm('Are you sure you want to delete this student?')) {
+                DataStore.deleteStudent(studentId);
+                populateStudentTable();
+            }
+        }
+
+        populateStudentTable();
+
+        function updateCharts() {
+            const students = DataStore.getStudents();
+            const averageAttendance = students.reduce((acc, s) => acc + s.attendance, 0) / students.length;
+            
+            document.querySelector('.stat-number').textContent = students.length;
+        }
+
+        updateCharts();
+
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const students = DataStore.getStudents();
+            const filtered = students.filter(student => 
+                student.name.toLowerCase().includes(searchTerm) ||
+                student.id.toLowerCase().includes(searchTerm)
+            );
+            populateStudentTable(filtered);
+        });
+
+        document.getElementById('courseFilter').addEventListener('change', function(e) {
+            const courseFilter = e.target.value;
+            const students = DataStore.getStudents();
+            const filtered = courseFilter ? 
+                students.filter(student => student.course.includes(courseFilter)) :
+                students;
+            populateStudentTable(filtered);
+        });
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminToken');
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        function toggleProfileMenu() {
+            document.getElementById('profileMenu').classList.toggle('active');
+        }
+
+        function showNotifications() {
+            const panel = document.getElementById('notificationsPanel');
+            panel.style.display = 'block';
+            loadNotifications();
+        }
+
+        function hideNotifications() {
+            document.getElementById('notificationsPanel').style.display = 'none';
+        }
+
+        function toggleSettings() {
+            const panel = document.getElementById('settingsPanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function loadNotifications() {
+            const notifications = DataStore.getAnnouncements();
+            const notificationsList = document.getElementById('notificationsList');
+            const notificationCount = document.getElementById('notificationCount');
+            
+            notificationCount.textContent = notifications.length;
+            notificationsList.innerHTML = notifications.map(notif => `
+                <div class="notification-item">
+                    <h4>${notif.title}</h4>
+                    <p>${notif.content}</p>
+                    <small>${new Date(notif.date).toLocaleDateString()}</small>
+                </div>
+            `).join('');
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.profile-dropdown')) {
+                document.getElementById('profileMenu').classList.remove('active');
+            }
+            if (!e.target.closest('.panel') && !e.target.closest('.action-btn')) {
+                document.getElementById('notificationsPanel').style.display = 'none';
+                document.getElementById('settingsPanel').style.display = 'none';
+            }
+        });
+
+        loadNotifications();
+    </script>
+</body>
+</html>

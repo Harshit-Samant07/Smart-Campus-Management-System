@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholarships | Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../CSS/dashboard.css">
+    <link rel="stylesheet" href="../CSS/scholarship.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <button class="toggle-sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="sidebar">
+            <div class="logo">
+                <h2>IMS Dashboard</h2>
+            </div>
+            <nav>
+                <a href="../student-dashboard.html"><i class="fas fa-home"></i>Dashboard</a>
+                <a href="attendance.html"><i class="fas fa-calendar-check"></i>Attendance</a>
+                <a href="assignments.html"><i class="fas fa-tasks"></i>Assignments</a>
+                <a href="feedback.html"><i class="fas fa-comment"></i>Feedback</a>
+                <a href="timetable.html"><i class="fas fa-clock"></i>Timetable</a>
+                <a href="notices.html"><i class="fas fa-bullhorn"></i>Notices</a>
+                <a href="portfolio.html"><i class="fas fa-folder-open"></i>Portfolio</a>
+                <a href="scholarship.html" class="active"><i class="fas fa-award"></i>Scholarship</a>
+                <a href="profile.html"><i class="fas fa-user"></i>Profile</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../student-login.html"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <header>
+                <div class="header-content">
+                    <h1>Scholarships</h1>
+                    <div class="user-info">
+                        <span><i class="fas fa-bell"></i></span>
+                        <img src="../profile.png" alt="Profile" class="profile-pic">
+                    </div>
+                </div>
+            </header>
+
+            <div class="scholarship-content">
+                <div class="active-applications">
+                    <h2>My Applications</h2>
+                    <div class="application-cards">
+                        <div class="application-card">
+                            <div class="application-status pending">
+                                <i class="fas fa-clock"></i> Under Review
+                            </div>
+                            <h3>Merit Scholarship 2024</h3>
+                            <div class="application-details">
+                                <p><i class="fas fa-calendar-alt"></i> Applied: Dec 15, 2024</p>
+                                <p><i class="fas fa-money-bill-wave"></i> Amount: ₹50,000</p>
+                            </div>
+                            <div class="progress-container">
+                                <div class="progress-bar" style="width: 60%"></div>
+                                <span class="progress-text">Application 60% Complete</span>
+                            </div>
+                            <button class="track-btn">Track Application</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="available-scholarships">
+                    <div class="section-header">
+                        <h2>Available Scholarships</h2>
+                        <div class="filters">
+                            <select id="categoryFilter">
+                                <option value="all">All Categories</option>
+                                <option value="merit">Merit Based</option>
+                                <option value="need">Need Based</option>
+                                <option value="research">Research</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="scholarship-grid">
+                        <div class="scholarship-card">
+                            <div class="scholarship-badge merit">Merit Based</div>
+                            <h3>Academic Excellence Scholarship</h3>
+                            <div class="scholarship-info">
+                                <p><i class="fas fa-money-bill-wave"></i> Amount: ₹75,000</p>
+                                <p><i class="fas fa-calendar-alt"></i> Deadline: April 30, 2025</p>
+                                <p><i class="fas fa-graduation-cap"></i> Min. CGPA: 8.5</p>
+                            </div>
+                            <div class="eligibility-criteria">
+                                <h4>Eligibility:</h4>
+                                <ul>
+                                    <li>Minimum CGPA of 8.5</li>
+                                    <li>No backlog papers</li>
+                                    <li>Regular attendance</li>
+                                </ul>
+                            </div>
+                            <button class="apply-btn">Apply Now</button>
+                        </div>
+
+                        <div class="scholarship-card">
+                            <div class="scholarship-badge need">Need Based</div>
+                            <h3>Financial Aid Scholarship</h3>
+                            <div class="scholarship-info">
+                                <p><i class="fas fa-money-bill-wave"></i> Amount: ₹60,000</p>
+                                <p><i class="fas fa-calendar-alt"></i> Deadline: May 15, 2025</p>
+                                <p><i class="fas fa-file-alt"></i> Required: Income Certificate</p>
+                            </div>
+                            <div class="eligibility-criteria">
+                                <h4>Eligibility:</h4>
+                                <ul>
+                                    <li>Family income below threshold</li>
+                                    <li>Good academic standing</li>
+                                    <li>Valid income certificate</li>
+                                </ul>
+                            </div>
+                            <button class="apply-btn">Apply Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="scholarship-resources">
+                    <h2>Helpful Resources</h2>
+                    <div class="resources-grid">
+                        <a href="#" class="resource-card">
+                            <i class="fas fa-file-pdf"></i>
+                            <h4>Application Guide</h4>
+                            <p>Step-by-step guide for applying</p>
+                        </a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('collapsed');
+            document.querySelector('.main-content').classList.toggle('expanded');
+        });
+    </script>
+</body>
+</html>

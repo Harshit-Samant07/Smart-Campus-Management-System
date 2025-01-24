@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Admin IMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/admin-style.css">
+    <script src="../../js/dataStore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar will be loaded here -->
+        <div class="main-content">
+            <header class="header-content">
+                <h1>Reports & Analytics</h1>
+                <div class="controls">
+                    <button class="action-btn" onclick="generateReport()">
+                        <i class="fas fa-download"></i> Export Report
+                    </button>
+                </div>
+            </header>
+
+            <div class="reports-container">
+                <div class="filter-bar">
+                    <select id="reportType" onchange="updateReport()">
+                        <option value="attendance">Attendance Report</option>
+                        <option value="performance">Performance Report</option>
+                        <option value="enrollment">Enrollment Statistics</option>
+                    </select>
+                    <input type="date" id="startDate">
+                    <input type="date" id="endDate">
+                    <button onclick="filterReport()" class="btn-primary">Apply Filter</button>
+                </div>
+
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <h3>Attendance Overview</h3>
+                        <canvas id="attendanceChart"></canvas>
+                    </div>
+                    <div class="report-card">
+                        <h3>Course Performance</h3>
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                    <div class="report-card">
+                        <h3>Student Distribution</h3>
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="report-details">
+                    <h3>Detailed Report</h3>
+                    <div class="table-responsive">
+                        <table class="data-table" id="reportTable">
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Value</th>
+                                    <th>Change</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Will be populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load sidebar
+        fetch('../components/sidebar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.querySelector('.dashboard-container').insertAdjacentHTML('afterbegin', data);
+            });
+
+        function initCharts() {
+            // Attendance Chart
+            new Chart(document.getElementById('attendanceChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                    datasets: [{
+                        label: 'Average Attendance',
+                        data: [85, 88, 82, 87, 90],
+                        borderColor: '#4e73df'
+                    }]
+                }
+            });
+
+            // Performance Chart
+            new Chart(document.getElementById('performanceChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['CS101', 'CS102', 'CS103', 'CS104'],
+                    datasets: [{
+                        label: 'Average Grade',
+                        data: [75, 82, 78, 85],
+                        backgroundColor: '#1cc88a'
+                    }]
+                }
+            });
+
+            // Distribution Chart
+            new Chart(document.getElementById('distributionChart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Computer Science', 'IT', 'Data Science'],
+                    datasets: [{
+                        data: [45, 30, 25],
+                        backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc']
+                    }]
+                }
+            });
+        }
+
+        function generateReport() {
+            const type = document.getElementById('reportType').value;
+            // Implementation for report generation and download
+            alert('Report download started');
+        }
+
+        function updateReport() {
+            const type = document.getElementById('reportType').value;
+            // Update charts and tables based on report type
+            // Implementation here
+        }
+
+        function filterReport() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            // Filter data based on date range
+            // Implementation here
+        }
+
+        // Initialize charts when page loads
+        document.addEventListener('DOMContentLoaded', initCharts);
+    </script>
+</body>
+</html>

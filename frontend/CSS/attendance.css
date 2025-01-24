@@ -1,0 +1,164 @@
+.attendance-overview {
+    padding: 20px;
+}
+
+.subject-attendance {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.attendance-table th,
+.attendance-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.attendance-table th {
+    background: #2c3e50;
+    color: white;
+}
+
+.attendance-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.attendance-table td:last-child {
+    font-weight: bold;
+}
+
+.attendance-summary {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 30px;
+}
+
+.chart-container {
+    width: 300px;
+    height: 300px;
+}
+
+.attendance-stats {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    background: #f8f9fa;
+    min-width: 120px;
+}
+
+.stat-item h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.stat-item p {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.stat-item p.present { color: #2ecc71; }
+.stat-item p.absent { color: #e74c3c; }
+.stat-item p.bunked { color: #f1c40f; }
+
+.attendance-details {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.filter-section {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.filter-section select {
+    padding: 8px 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #f8f9fa;
+    cursor: pointer;
+}
+
+.attendance-table-container {
+    overflow-x: auto;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance-table th,
+.attendance-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.attendance-table th {
+    background: #2c3e50;
+    color: white;
+}
+
+.attendance-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9em;
+}
+
+.status.present {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status.absent {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status.bunked {
+    background: #fff3cd;
+    color: #856404;
+}
+
+@media (max-width: 768px) {
+    .attendance-summary {
+        flex-direction: column;
+    }
+    
+    .chart-container {
+        width: 100%;
+    }
+    
+    .attendance-stats {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset IMS System</title>
+    <style>
+        body {
+            padding: 2rem;
+            font-family: Arial, sans-serif;
+        }
+        .warning {
+            color: red;
+            margin-bottom: 1rem;
+        }
+        .button {
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Reset IMS System</h1>
+    <p class="warning">Warning: This will clear all data and reset the system to initial state!</p>
+    <button onclick="resetSystem()" class="button">Reset System</button>
+
+    <script>
+        function resetSystem() {
+            if (confirm('Are you sure you want to reset the entire system? All data will be lost!')) {
+                // Clear all IMS related data
+                Object.keys(localStorage).forEach(key => {
+                    if (key.startsWith('ims_')) {
+                        localStorage.removeItem(key);
+                    }
+                });
+                
+                // Remove tokens
+                localStorage.removeItem('token');
+                localStorage.removeItem('adminToken');
+                
+                alert('System reset complete. Redirecting to login page...');
+                window.location.href = '../student-login.html';
+            }
+        }
+    </script>
+</body>
+</html>

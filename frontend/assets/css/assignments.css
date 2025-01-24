@@ -1,0 +1,103 @@
+.assignments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.assignment-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.assignment-card:hover {
+    transform: translateY(-5px);
+}
+
+.assignment-header {
+    background: #1a237e;
+    color: white;
+    padding: 15px;
+    position: relative;
+}
+
+.assignment-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.assignment-body {
+    padding: 15px;
+}
+
+.assignment-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.assignment-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.assignment-actions {
+    padding: 10px 15px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Assignment Form Styles */
+#addAssignmentForm .form-group textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.filters select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    min-width: 150px;
+}
+
+/* Status badges */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.status-pending { background: #fff3cd; color: #856404; }
+.status-submitted { background: #d4edda; color: #155724; }
+.status-late { background: #f8d7da; color: #721c24; }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .assignments-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable | Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../CSS/dashboard.css">
+    <link rel="stylesheet" href="../CSS/timetable.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <button class="toggle-sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="sidebar">
+            <div class="logo">
+                <h2>IMS Dashboard</h2>
+            </div>
+            <nav>
+                <a href="../student-dashboard.html"><i class="fas fa-home"></i>Dashboard</a>
+                <a href="attendance.html"><i class="fas fa-calendar-check"></i>Attendance</a>
+                <a href="assignments.html"><i class="fas fa-tasks"></i>Assignments</a>
+                <a href="feedback.html"><i class="fas fa-comment"></i>Feedback</a>
+                <a href="timetable.html" class="active"><i class="fas fa-clock"></i>Timetable</a>
+                <a href="notices.html"><i class="fas fa-bullhorn"></i>Notices</a>
+                <a href="portfolio.html"><i class="fas fa-folder-open"></i>Portfolio</a>
+                <a href="scholarship.html"><i class="fas fa-award"></i>Scholarship</a>
+                <a href="profile.html"><i class="fas fa-user"></i>Profile</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../student-login.html"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <header>
+                <div class="header-content">
+                    <h1>Weekly Timetable</h1>
+                    <div class="user-info">
+                        <span><i class="fas fa-bell"></i></span>
+                        <img src="../profile.png" alt="Profile" class="profile-pic">
+                    </div>
+                </div>
+            </header>
+
+            <div class="timetable-content">
+                <div class="weekly-timetable">
+                    <table class="timetable-table">
+                        <thead>
+                            <tr>
+                                <th>Day/Time</th>
+                                <th>9:00-10:00</th>
+                                <th>10:00-11:00</th>
+                                <th>11:00-12:00</th>
+                                <th>12:00-1:00</th>
+                                <th>1:00-2:00</th>
+                                <th>2:00-3:00</th>
+                                <th>3:00-4:00</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Monday</td>
+                                <td class="subject-cell ds" colspan="2">Data Structures<br>Room 301</td>
+                                <td class="subject-cell dbms" colspan="2">WebD<br>Lab 2</td>
+                                <td class="subject-cell ds" colspan="2">DSTL<br>Room 301</td>
+                                <td class="break">Lunch Break</td>
+                                <td class="subject-cell ds" colspan="2">COA<br>Room 301</td>
+                                <td class="subject-cell python" colspan="2">Python Programming<br>Lab 1</td>
+                            </tr>
+                            <tr>
+                                <td>Tuesday</td>
+                                <td class="subject-cell ds" colspan="2">DSTL<br>Room 301</td>
+                                <td class="subject-cell dbms" colspan="2">COA<br>Lab 2</td>
+                                <td class="subject-cell ds" colspan="2">DSTL<br>Room 301</td>
+                                <td class="break">Lunch Break</td>
+                                <td class="subject-cell ds" colspan="2">Python Programming<br>Room 301</td>
+                                <td class="subject-cell python" colspan="2">WebD<br>Lab 1</td>
+                            </tr>
+                            <tr>
+                                <td>Wednesday</td>
+                                <td class="subject-cell ds" colspan="2">Data Structures<br>Room 301</td>
+                                <td class="subject-cell dbms" colspan="2">WebD<br>Lab 2</td>
+                                <td class="subject-cell ds" colspan="2">DSTL<br>Room 301</td>
+                                <td class="break">Lunch Break</td>
+                                <td class="subject-cell ds" colspan="2">COA<br>Room 301</td>
+                                <td class="subject-cell python" colspan="2">Python Programming<br>Lab 1</td>
+                            </tr>
+                            <tr>
+                                <td>Thursday</td>
+                                <td class="subject-cell ds" colspan="2">Python Programming<br>Room 301</td>
+                                <td class="subject-cell dbms" colspan="2">COA<br>Lab 2</td>
+                                <td class="subject-cell ds" colspan="2">DSTL<br>Room 301</td>
+                                <td class="break">Lunch Break</td>
+                                <td class="subject-cell ds" colspan="2">Data Structures<br>Room 301</td>
+                                <td class="subject-cell python" colspan="2">WebD<br>Lab 1</td>
+                            </tr>
+                            <tr>
+                                <td>Friday</td>
+                                <td class="subject-cell ds" colspan="2">Data Structures<br>Room 301</td>
+                                <td class="subject-cell dbms" colspan="2">WebD<br>Lab 2</td>
+                                <td class="subject-cell ds" colspan="2">Python Programming<br>Room 301</td>
+                                <td class="break">Lunch Break</td>
+                                <td class="subject-cell ds" colspan="2">DSTL<br>Room 301</td>
+                                <td class="subject-cell python" colspan="2">Data Structure<br>Lab 1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="download-section">
+                    <button class="download-btn">
+                        <i class="fas fa-download"></i> Download Timetable
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('collapsed');
+            document.querySelector('.main-content').classList.toggle('expanded');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+.scholarship-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Active Applications Styles */
+.application-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.application-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.application-status {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.application-status.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.progress-container {
+    margin: 15px 0;
+    background: #f5f6fa;
+    border-radius: 10px;
+    height: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: #3498db;
+    border-radius: 10px;
+}
+
+.progress-text {
+    font-size: 0.9em;
+    color: #7f8c8d;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Available Scholarships Styles */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.filters select {
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background: white;
+}
+
+.scholarship-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.scholarship-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.scholarship-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9em;
+}
+
+.scholarship-badge.merit {
+    background: #d4edda;
+    color: #155724;
+}
+
+.scholarship-badge.need {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.scholarship-info {
+    margin: 15px 0;
+    color: #666;
+}
+
+.scholarship-info p {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.eligibility-criteria {
+    margin: 15px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.eligibility-criteria ul {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+.eligibility-criteria li {
+    margin: 5px 0;
+    color: #666;
+}
+
+/* Button Styles */
+.track-btn, .apply-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.track-btn {
+    background: #f8f9fa;
+    color: #2c3e50;
+}
+
+.apply-btn {
+    background: #3498db;
+    color: white;
+}
+
+.apply-btn:hover {
+    background: #2980b9;
+}
+
+/* Resources Section */
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.resource-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: #2c3e50;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.resource-card:hover {
+    transform: translateY(-5px);
+}
+
+.resource-card i {
+    font-size: 2em;
+    color: #3498db;
+    margin-bottom: 15px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .section-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .filters {
+        width: 100%;
+    }
+    
+    .filters select {
+        width: 100%;
+    }
+}

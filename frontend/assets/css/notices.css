@@ -1,0 +1,246 @@
+.notice-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Filters Section */
+.notice-filters {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.filter-options {
+    display: flex;
+    gap: 15px;
+}
+
+.filter-options select {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Remove search box styles */
+.search-box {
+    display: none;
+}
+
+/* Notice Grid */
+.notice-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.notice-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: relative;
+    transition: transform 0.2s;
+}
+
+.notice-card:hover {
+    transform: translateY(-5px);
+}
+
+.notice-card.urgent {
+    border-left: 4px solid #e74c3c;
+}
+
+.priority-tag {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #fff3cd;
+    color: #856404;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8em;
+}
+
+.notice-header {
+    margin-bottom: 15px;
+}
+
+.notice-header h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    padding-right: 80px;
+}
+
+.notice-date {
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.notice-category {
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.notice-category.academic { background: #e3f2fd; color: #1976d2; }
+.notice-category.exam { background: #fce4ec; color: #c2185b; }
+.notice-category.event { background: #f3e5f5; color: #7b1fa2; }
+.notice-category.general { background: #e8f5e9; color: #388e3c; }
+
+.notice-text {
+    color: #666;
+    margin: 15px 0;
+    line-height: 1.5;
+}
+
+.notice-attachments {
+    margin: 15px 0;
+}
+
+.attachment {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 5px;
+    color: #2c3e50;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.attachment i {
+    color: #e74c3c;
+}
+
+.notice-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    margin-top: 20px;
+}
+
+.read-more {
+    color: #3498db;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+.views {
+    color: #7f8c8d;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.page-btn {
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 5px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.page-btn.active {
+    background: #3498db;
+    color: white;
+}
+
+.page-dots {
+    display: flex;
+    align-items: center;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .notice-filters {
+        justify-content: stretch;
+    }
+
+    .filter-options {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .filter-options select {
+        width: 100%;
+    }
+}
+
+.notices-filters {
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 12px 40px 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.search-bar i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+.notices-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.notice-title {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #2c3e50;
+}
+
+.notice-content {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
